@@ -1,0 +1,40 @@
+#+TITLE:noise-tester
+#+AUTHOR:
+#+LANGUAGE: en
+#+OPTIONS: date:nil timestamp:nil toc:nil
+
+=noise-tester= is a tool to cause diverse schedulings in parallel
+tests for the JVM. It achieves this by inserting code that randomly
+slows the threads down.
+
+* Dependencies
+  The software runs on Java 8 and depends on ASM, a Java bytecode
+  manipulation library:
+  
+  http://download.forge.ow2.org/asm/asm-5.1-bin.zip
+
+  The =asm-all-5.1.jar= from this archive has to be in the class path
+  to use or compile =noise-tester=.
+
+* Compiling
+  The code can be compiled with the following command:
+  #+BEGIN_SRC shell
+    javac -d noise-tester/bin/ \
+          -sourcepath noise-tester/src/ \
+          noise-tester/src/instrumentation/agent/Agent.java
+  #+END_SRC
+  And packaged into a JAR:
+  #+BEGIN_SRC shell
+    jar cvfm noise-tester.jar \
+        noise-tester/META-INF/MANIFEST.MF \
+        -C noise-tester/bin/ .
+  #+END_SRC
+* Running
+  =noise-tester= can be used as a Java agent to instrument your
+  code. For this the following has to be added to the JVM arguments:
+  #+BEGIN_SRC shell
+    -javaagent:/path/to/noise-tester.jar=/path/to/instrumentation-rules
+  #+END_SRC
+
+  To determine how many times a test should be run, you can use the
+  =ParallelMetricRule= Junit 4 rule.
