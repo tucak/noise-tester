@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Premain-Class: instrumentation.agent.Agent
+Main-Class: instrumentation.agent.Agent
